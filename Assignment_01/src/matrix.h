@@ -33,6 +33,7 @@ void free_matrix(Matrix *mat);
 
 // Read matrix from file
 void read_gemm_input(const char *filename, Matrix *A, Matrix *B);
+void read_matrix_input(const char *filename, Matrix *A);
 
 // Print matrix
 void print_matrix(Matrix mat);

@@ -82,21 +82,29 @@ void read_gemm_input(const char *filename, Matrix *A, Matrix *B)
 
     /* Read Matrix A */
 
-    for (i = 0; i < M; i++)
-    {
+    for (i = 0; i < M; i++){
         for (j = 0; j < K; j++)
         {
-            fscanf(fp, "%lf", &A->data[i][j]);
+            if (fscanf(fp, "%lf", &A->data[i][j]) != 1)
+            {
+                printf("Error: Invalid matrix A data in input file.\n");
+                fclose(fp);
+                exit(EXIT_FAILURE);
+            }
         }
     }
 
     /* Read Matrix B */
 
-    for (i = 0; i < K; i++)
-    {
+    for (i = 0; i < K; i++){
         for (j = 0; j < N; j++)
         {
-            fscanf(fp, "%lf", &B->data[i][j]);
+            if (fscanf(fp, "%lf", &B->data[i][j]) != 1)
+            {
+                printf("Error: Invalid matrix B data in input file.\n");
+                fclose(fp);
+                exit(EXIT_FAILURE);
+            }
         }
     }
 
@@ -144,4 +152,39 @@ void random_matrix(Matrix *mat)
 double get_time(void)
 {
     return (double)clock() / CLOCKS_PER_SEC;
+}
+
+void read_matrix_input(const char *filename, Matrix *A)
+{
+    FILE *fp = fopen(filename, "r");
+
+    if (fp == NULL)
+    {
+        printf("Unable to open input file.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    if (fscanf(fp, "%d %d", &A->rows, &A->cols) != 2)
+    {
+        printf("Invalid input format.\n");
+        fclose(fp);
+        exit(EXIT_FAILURE);
+    }
+
+    *A = create_matrix(A->rows, A->cols);
+
+    for (int i = 0; i < A->rows; i++)
+    {
+        for (int j = 0; j < A->cols; j++)
+        {
+            if (fscanf(fp, "%lf", &A->data[i][j]) != 1)
+            {
+                printf("Invalid matrix data.\n");
+                fclose(fp);
+                exit(EXIT_FAILURE);
+            }
+        }
+    }
+
+    fclose(fp);
 }

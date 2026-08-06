@@ -135,7 +135,7 @@ int main(void)
 
             snprintf(filepath, sizeof(filepath), "%s%s", TEST_DIR, filename);
 
-            read_gemm_input(filepath, &A, &B);
+            read_matrix_input(filepath, &A);
 
             start = get_time();
 
@@ -154,7 +154,6 @@ int main(void)
                    execution_time);
 
             free_matrix(&A);
-            free_matrix(&B);
             free_csr(&csr);
 
             break;
