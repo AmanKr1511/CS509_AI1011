@@ -35,7 +35,6 @@ Assignment_01/
 │   └── matrix.h
 ├── test/
 ├── results/
-├── wrapper.sh
 └── README.md
 ```
 
@@ -59,8 +58,8 @@ Stores only non-zero values of a sparse matrix using three arrays: Values, Colum
 The project uses a Linux wrapper script instead of a Makefile.
 
 ```bash
-chmod +x wrapper.sh
-./wrapper.sh
+chmod +x wrapper.cpp
+./wrapper.cpp
 ```
 
 ## 6. Input and Output
