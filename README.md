@@ -6,7 +6,7 @@
 
 **Course:** CS509
 
-**Language:** C
+**Language:** C and C++
 
 **Platform:** Linux (GCC)
 

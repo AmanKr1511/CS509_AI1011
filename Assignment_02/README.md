@@ -12,13 +12,11 @@ Assignment_02/
 ├── src/
 │   ├── graph.hpp
 │   ├── graph_io.cpp
-│   ├── graph_csr.c
+│   ├── graph_csr.cpp
 │   ├── bellman_ford.hpp/.cpp
 │   ├── floyd_warshall.hpp/.cpp
-│   └── driver.c
-├── test/
-├── bin/
-├── results/
+│   └── driver.cpp
+├── tests/
 └── README.md
 ```
 
@@ -27,7 +25,7 @@ Assignment_02/
 Via the shared repo-root dispatcher:
 
 ```
-./common_wrapper.sh Assignment_02              # interactive menu
+./common_wrapper Assignment_02              # interactive menu
 ```
 
 Directly, from inside `Assignment_02/`:
@@ -37,23 +35,23 @@ gcc -std=c11 -Wall -Wextra -Isrc src/*.c -o bin/driver
 ./bin/driver                     # interactive menu, loops until "3. Exit"
 ```
 
-> **Pass a bare filename, not a path.** `main.c` prepends `tests/` to
+> **Pass a bare filename, not a path.** `driver.cpp` prepends `tests/` to
 
 
 ## Input Formats
 
-- **Bellman-Ford** (`test/bf_*.txt`): weighted, directed adjacency
-  list (Section 5.1) — `V E` header, one line per vertex (`u degree
+- **Bellman-Ford** (`bf_*.txt`): weighted, directed adjacency
+  list — `V E` header, one line per vertex (`u degree
   n1 w1 n2 w2 ...`), then `SOURCE s`.
 
-- **Floyd-Warshall** (`test/fw_*.txt`): dense `V x V` matrix (Section
-  6.1) — `V` header, then `V` rows of `V` space-separated entries,
+- **Floyd-Warshall** (`fw_*.txt`): dense `V x V` matrix 
+ — `V` header, then `V` rows of `V` space-separated entries,
   using `INF` for "no edge" and `0` on the diagonal.
 
 ## Timing Methodology
 
 `get_time_ms()` (in `graph_io.c`) times only the algorithm call
-itself — `main.c` calls it immediately before and immediately after
+itself — `driver.cpp` calls it immediately before and immediately after
 `bellman_ford()` / `floyd_warshall()`.
 
 ## Test Files

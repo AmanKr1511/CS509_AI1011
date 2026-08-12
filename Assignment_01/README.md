@@ -1,14 +1,5 @@
 # Matrix Multiplication and CSR Representation
 
-**Course:** CS509
-**Assignment:** 01
-**Name:** AMAN KUMAR
-**Entry Number:** 2026AIM1011
-**Language:** C
-**Platform:** Linux (GCC)
-
----
-
 ## 1. Introduction
 
 This project implements three fundamental matrix-processing algorithms in C using a modular design. The objectives are to understand dense matrix multiplication, optimize multiplication using cache blocking, and efficiently represent sparse matrices using the Compressed Sparse Row (CSR) format. The project also measures execution time to compare algorithm performance.
@@ -58,8 +49,7 @@ Stores only non-zero values of a sparse matrix using three arrays: Values, Colum
 The project uses a Linux wrapper script instead of a Makefile.
 
 ```bash
-chmod +x wrapper.cpp
-./wrapper.cpp
+./common_wrapper.cpp
 ```
 
 ## 6. Input and Output
