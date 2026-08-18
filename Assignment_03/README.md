@@ -114,7 +114,7 @@ out-of-memory failures were observed at any graph size.
 ## Results
 
 | File | V | E | Expected Wt. | Kruskal Wt. | Prim Wt. | Kruskal Time | Prim Time | Status |
-|---|---|---|---|---|---|---|---|---|---|
+|---|---|---|---|---|---|---|---|---|
 | `mst_10.txt` | 10 | 30 | 9 | 9 | 9 | 0.052 ms | 0.025 ms | Pass |
 | `mst_100.txt` | 100 | 300 | 99 | 99 | 99 | 0.893 ms | 0.154 ms | Pass |
 | `mst_10000.txt` | 10,000 | 30,000 | 9999 | 9999 | 9999 | 7.882 ms | 53.199 ms | Pass |
