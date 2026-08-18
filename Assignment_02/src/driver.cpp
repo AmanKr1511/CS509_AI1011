@@ -9,25 +9,25 @@
 
 constexpr const char* TEST_DIR = "tests/";
 
-static std::string make_test_path(const std::string& filename)
+static string make_test_path(const string& filename)
 {
     if (filename.rfind(TEST_DIR, 0) == 0)
     {
         return filename;
     }
 
-    return std::string(TEST_DIR) + filename;
+    return string(TEST_DIR) + filename;
 }
 
 static void print_usage(const char* prog)
 {
-    std::cerr << "Usage: " << prog << " <bf|fw> <input_file>\n";
-    std::cerr << "       " << prog << "                    (interactive menu)\n";
+    cerr << "Usage: " << prog << " <bf|fw> <input_file>\n";
+    cerr << "       " << prog << "                    (interactive menu)\n";
 }
 
-static void run_bellman_ford(const std::string& filename)
+static void run_bellman_ford(const string& filename)
 {
-    const std::string filepath = make_test_path(filename);
+    const string filepath = make_test_path(filename);
 
     int source = 0;
     AdjList adj = read_bf_adjlist(filepath, source);
@@ -44,9 +44,9 @@ static void run_bellman_ford(const std::string& filename)
     free_adjlist(adj);
 }
 
-static void run_floyd_warshall(const std::string& filename)
+static void run_floyd_warshall(const string& filename)
 {
-    const std::string filepath = make_test_path(filename);
+    const string filepath = make_test_path(filename);
 
     DenseGraph g = read_fw_matrix(filepath);
 
@@ -64,54 +64,54 @@ static void interactive_menu()
 {
     while (true)
     {
-        std::cout << "\n======================================\n";
-        std::cout << "        CS509 - Assignment 2\n";
-        std::cout << "======================================\n";
-        std::cout << "  1. Bellman-Ford\n";
-        std::cout << "  2. Floyd-Warshall\n";
-        std::cout << "  3. Exit\n";
-        std::cout << "Select an option: ";
+        cout << "\n======================================\n";
+        cout << "        CS509 - Assignment 2\n";
+        cout << "======================================\n";
+        cout << "  1. Bellman-Ford\n";
+        cout << "  2. Floyd-Warshall\n";
+        cout << "  3. Exit\n";
+        cout << "Select an option: ";
 
         int choice = 0;
-        if (!(std::cin >> choice))
+        if (!(cin >> choice))
         {
-            std::cerr << "Error: invalid input.\n";
-            std::cin.clear();
-            std::cin.ignore(10000, '\n');
+            cerr << "Error: invalid input.\n";
+            cin.clear();
+            cin.ignore(10000, '\n');
             continue;
         }
 
         if (choice == 3)
         {
-            std::cout << "Exiting ....\n";
+            cout << "Exiting ....\n";
             break;
         }
 
-        std::string filename;
+        string filename;
         switch (choice)
         {
             case 1:
-                std::cout << "Enter input file name (from tests/) : ";
-                if (!(std::cin >> filename))
+                cout << "Enter input file name (from tests/) : ";
+                if (!(cin >> filename))
                 {
-                    std::cerr << "Error: invalid file name.\n";
+                    cerr << "Error: invalid file name.\n";
                     return;
                 }
                 run_bellman_ford(filename);
                 break;
 
             case 2:
-                std::cout << "Enter input file name (from tests/) : ";
-                if (!(std::cin >> filename))
+                cout << "Enter input file name (from tests/) : ";
+                if (!(cin >> filename))
                 {
-                    std::cerr << "Error: invalid file name.\n";
+                    cerr << "Error: invalid file name.\n";
                     return;
                 }
                 run_floyd_warshall(filename);
                 break;
 
             default:
-                std::cerr << "Error: invalid selection '" << choice
+                cerr << "Error: invalid selection '" << choice
                           << "' (expected 1, 2, or 3)\n";
                 break;
         }
@@ -134,25 +134,25 @@ int main(int argc, char** argv)
             return 1;
         }
 
-        if (std::strcmp(argv[1], "bf") == 0)
+        if (strcmp(argv[1], "bf") == 0)
         {
             run_bellman_ford(argv[2]);
         }
-        else if (std::strcmp(argv[1], "fw") == 0)
+        else if (strcmp(argv[1], "fw") == 0)
         {
             run_floyd_warshall(argv[2]);
         }
         else
         {
-            std::cerr << "Error: unknown algorithm '" << argv[1]
+            cerr << "Error: unknown algorithm '" << argv[1]
                       << "' (expected 'bf' or 'fw')\n";
             print_usage(argv[0]);
             return 1;
         }
     }
-    catch (const std::exception& ex)
+    catch (const exception& ex)
     {
-        std::cerr << ex.what() << '\n';
+        cerr << ex.what() << '\n';
         return 1;
     }
 

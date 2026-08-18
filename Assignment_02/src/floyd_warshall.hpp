@@ -6,7 +6,7 @@
 struct FloydWarshallResult
 {
     int vertices{};
-    std::vector<std::vector<int>> dist;
+    vector<std::vector<int>> dist;
     bool negative_cycle{false};
 };
 

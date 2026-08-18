@@ -131,24 +131,6 @@ void print_matrix(Matrix mat)
     printf("\n");
 }
 
-void random_matrix(Matrix *mat)
-{
-    int i, j;
-
-    if (mat == NULL || mat->data == NULL)
-        return;
-
-    srand((unsigned int)time(NULL));
-
-    for (i = 0; i < mat->rows; i++)
-    {
-        for (j = 0; j < mat->cols; j++)
-        {
-            mat->data[i][j] = rand() % 10;
-        }
-    }
-}
-
 double get_time(void)
 {
     return (double)clock() / CLOCKS_PER_SEC;

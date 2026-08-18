@@ -7,7 +7,7 @@ struct BellmanFordResult
 {
     int vertices{};
     int source{};
-    std::vector<int> dist;
+    vector<int> dist;
     bool negative_cycle{false};
 };
 

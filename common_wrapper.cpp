@@ -3,74 +3,112 @@
 #include <algorithm>
 #include <cstdlib>
 #include <vector>
+#include <string>
 
-namespace fs = std::filesystem;
+using namespace std;
+
+namespace fs = filesystem;
 
 int main(int argc, char* argv[])
 {
-    std::vector<fs::path> a;
+    vector<fs::path> assignments;
 
-    for (auto& x : fs::directory_iterator("."))
-        if (x.is_directory() &&
-            x.path().filename().string().find("Assignment_") == 0)
-            a.push_back(x.path());
+    for (const auto& entry : fs::directory_iterator("."))
+    {
+        if (entry.is_directory() &&
+            entry.path().filename().string().find("Assignment_") == 0)
+        {
+            assignments.push_back(entry.path());
+        }
+    }
 
-    std::sort(a.begin(), a.end());
+    sort(assignments.begin(), assignments.end());
 
-    int n = 0;
+    int selected = 0;
 
     if (argc > 1)
     {
-        for (int i = 0; i < (int)a.size(); ++i)
-            if (a[i].filename() == argv[1])
-                n = i + 1;
+        for (int i = 0; i < static_cast<int>(assignments.size()); ++i)
+        {
+            if (assignments[static_cast<size_t>(i)].filename() == argv[1])
+            {
+                selected = i + 1;
+                break;
+            }
+        }
     }
     else
     {
-        std::cout << "\n1. Assignment_01\n"
-                  << "2. Assignment_02\n"
-                  << "0. Exit\n"
-                  << "Choose assignment: ";
-        std::cin >> n;
+        cout << "\n";
+
+        for (int i = 0; i < static_cast<int>(assignments.size()); ++i)
+        {
+            cout << (i + 1) << ". "
+                      << assignments[static_cast<size_t>(i)]
+                             .filename().string()
+                      << "\n";
+        }
+
+        cout << "0. Exit\nChoose assignment: ";
+        cin >> selected;
     }
 
-    if (n <= 0 || n > (int)a.size())
+    if (selected <= 0 ||
+        selected > static_cast<int>(assignments.size()))
+    {
         return 0;
+    }
 
-    fs::path bin = a[n - 1] / "bin";
+    fs::path bin =
+        assignments[static_cast<size_t>(selected - 1)] / "bin";
+
     fs::create_directories(bin);
 
-    std::string cmd;
+    string cmd;
 
-    /*
-     * Assignment 01 stays C.
-     * Its .c files are compiled as C object files.
-     */
-    if (n == 1)
-        cmd = "gcc -std=c11 -Wall -Wextra ";
-
-    /*
-     * Assignment 02+ are C++.
-     * Previous assignment sources are reused.
-     */
-    else
-        cmd = "g++ -std=c++17 -Wall -Wextra ";
-
-    for (int i = 0; i < n; ++i)
+    // Select compiler
+    switch (selected)
     {
-        fs::path src = a[i] / "src";
+        case 1:
+            // Assignment 01 is C
+            cmd = "gcc -std=c11 -Wall -Wextra ";
+            break;
 
-        for (auto& f : fs::directory_iterator(src))
+        default:
+            // Assignment 02+ are C++
+            cmd = "g++ -std=c++17 -Wall -Wextra ";
+            break;
+    }
+
+    // Compile all source files from previous assignments,
+    // excluding their drivers, then add the selected
+    // assignment's sources including its driver.
+    for (int i = 0; i < selected; ++i)
+    {
+        const fs::path src =
+            assignments[static_cast<size_t>(i)] / "src";
+
+        if (!fs::exists(src))
         {
-            auto ext = f.path().extension().string();
-            auto name = f.path().filename().string();
+            continue;
+        }
+
+        for (const auto& entry : fs::directory_iterator(src))
+        {
+            const string ext =
+                entry.path().extension().string();
+
+            const string name =
+                entry.path().filename().string();
 
             if ((ext != ".c" && ext != ".cpp") ||
-                (i < n - 1 &&
+                (i < selected - 1 &&
                  (name == "driver.c" || name == "driver.cpp")))
+            {
                 continue;
+            }
 
-            cmd += "\"" + f.path().string() + "\" ";
+            cmd += "\"" + entry.path().string() + "\" ";
         }
 
         cmd += "-I\"" + src.string() + "\" ";
@@ -78,19 +116,28 @@ int main(int argc, char* argv[])
 
     cmd += "-o \"" + (bin / "driver").string() + "\"";
 
-    std::cout << "\nBuilding...\n";
+    cout << "\nBuilding "
+              << assignments[static_cast<size_t>(selected - 1)]
+                     .filename().string()
+              << "...\n";
 
-    if (std::system(cmd.c_str()))
+    if (system(cmd.c_str()) != 0)
+    {
+        cerr << "Build failed.\n";
         return 1;
+    }
 
-    std::cout << "Build successful.\n\n";
+    cout << "Build successful.\n\n";
 
-    std::string run =
-        "cd \"" + a[n - 1].string() +
+    string run =
+        "cd \"" +
+        assignments[static_cast<size_t>(selected - 1)].string() +
         "\" && \"bin/driver\"";
 
     for (int i = 2; i < argc; ++i)
-        run += " \"" + std::string(argv[i]) + "\"";
+    {
+        run += " \"" + string(argv[i]) + "\"";
+    }
 
-    return std::system(run.c_str());
+    return system(run.c_str());
 }
